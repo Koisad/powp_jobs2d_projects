@@ -20,7 +20,7 @@ import edu.kis.powp.jobs2d.features.CommandsFeature;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
 
-import edu.kis.powp.jobs2d.drivers.TransformerDriver;
+import edu.kis.powp.jobs2d.drivers.TransformerDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.RotationDriverDecorator;
 
 public class TestJobs2dApp {
@@ -94,13 +94,13 @@ public class TestJobs2dApp {
         Job2dDriver specialLineWithLoggerDriver = new DriverComposite(Arrays.asList(specialLineDriver, loggerDriver));
         DriverFeature.addDriver("Logger + Special line", specialLineWithLoggerDriver);
 
-        Job2dDriver scaleDriver = new TransformerDriver(basicLineDriver, 2.0d, 2.0d);
+        Job2dDriver scaleDriver = new TransformerDriverDecorator(basicLineDriver, 2.0d, 2.0d);
         DriverFeature.addDriver("Basic Line x2", scaleDriver);
 
-        Job2dDriver smallDriver = new TransformerDriver(basicLineDriver, 0.5d, 0.5d);
+        Job2dDriver smallDriver = new TransformerDriverDecorator(basicLineDriver, 0.5d, 0.5d);
         DriverFeature.addDriver("Basic Line x0.5", smallDriver);
 
-        Job2dDriver flipDriver = new TransformerDriver(basicLineDriver, -1.0d, 1.0d);
+        Job2dDriver flipDriver = new TransformerDriverDecorator(basicLineDriver, -1.0d, 1.0d);
         DriverFeature.addDriver("Basic Line Flip X", flipDriver);
 
         Job2dDriver rotateDriver = new RotationDriverDecorator(basicLineDriver, 90);

@@ -2,12 +2,12 @@ package edu.kis.powp.jobs2d.drivers;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 
-public class TransformerDriver implements Job2dDriver {
+public class TransformerDriverDecorator implements Job2dDriver {
     private Job2dDriver driver;
     private double scaleX;
     private double scaleY;
 
-    public TransformerDriver(Job2dDriver driver, double scaleX, double scaleY) {
+    public TransformerDriverDecorator(Job2dDriver driver, double scaleX, double scaleY) {
         this.driver = driver;
         this.scaleX = scaleX;
         this.scaleY = scaleY;
