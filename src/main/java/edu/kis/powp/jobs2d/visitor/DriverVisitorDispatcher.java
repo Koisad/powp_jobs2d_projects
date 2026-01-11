@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
 
 /**
  * Dispatcher pattern implementation for driver visitors.
- * Eliminates instanceof checks using O(1) lookup table dispatch.
+ * Eliminates instanceof checks
  */
 public class DriverVisitorDispatcher {
     
@@ -20,7 +20,6 @@ public class DriverVisitorDispatcher {
     private static final Map<Class<?>, BiConsumer<DriverVisitor, Job2dDriver>> DISPATCH_TABLE = new HashMap<>();
     
     static {
-        // Register dispatch strategies for each driver type
         DISPATCH_TABLE.put(LoggerDriver.class, 
             (visitor, driver) -> visitor.visit((LoggerDriver) driver));
         
