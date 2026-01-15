@@ -1,11 +1,11 @@
 package edu.kis.powp.jobs2d.command;
 
-import edu.kis.powp.jobs2d.Job2dDriver;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import edu.kis.powp.jobs2d.Job2dDriver;
 
 /**
  * An immutable implementation of ICompoundCommand that allows executing multiple commands in sequence.
@@ -15,6 +15,7 @@ import java.util.List;
 public class CompoundCommand implements ICompoundCommand {
 
     private final List<DriverCommand> commands;
+    private final String name;
 
     /**
      * Private constructor to ensure controlled creation of CompoundCommand instances.
@@ -22,8 +23,14 @@ public class CompoundCommand implements ICompoundCommand {
      * 
      * @param commands the list of commands to be executed in sequence
      */
-    private CompoundCommand(List<DriverCommand> commands) {
-        this.commands = Collections.unmodifiableList(new ArrayList<>(commands));
+    private CompoundCommand(List<DriverCommand> commands, String name) {
+        List<DriverCommand> copied = new ArrayList<>();
+        for (DriverCommand command : commands) {
+            copied.add(command.copy());
+        }
+        this.commands = Collections.unmodifiableList(copied);
+        this.name = name;
+
     }
 
     /**
@@ -38,6 +45,7 @@ public class CompoundCommand implements ICompoundCommand {
         }
     }
 
+
     /**
      * Returns an iterator over the commands in this compound command.
      * 
@@ -48,6 +56,14 @@ public class CompoundCommand implements ICompoundCommand {
         return commands.iterator();
     }
 
+    @Override
+    public CompoundCommand copy() {
+        List<DriverCommand> copied = new ArrayList<>();
+        for (DriverCommand command : commands) {
+            copied.add(command.copy());
+        }
+        return new CompoundCommand(copied, this.name + " (copy)");
+    }
 
     /**
      * Factory method to create a CompoundCommand from a list of commands.
@@ -55,8 +71,8 @@ public class CompoundCommand implements ICompoundCommand {
      * @param commands the list of commands to be executed in sequence
      * @return a new CompoundCommand instance containing the provided commands
      */
-    public static CompoundCommand fromListOfCommands(List<DriverCommand> commands) {
-        return new CompoundCommand(commands);
+    public static CompoundCommand fromListOfCommands(List<DriverCommand> commands, String name) {
+        return new CompoundCommand(commands, name);
     }
 
     /**
@@ -70,7 +86,7 @@ public class CompoundCommand implements ICompoundCommand {
     public CompoundCommand concatCommands(List<DriverCommand> commands) {
         List<DriverCommand> newCommands = new ArrayList<>(this.commands);
         newCommands.addAll(commands);
-        return new CompoundCommand(newCommands);
+        return new CompoundCommand(newCommands, this.name);
     }
 
     /**
@@ -97,6 +113,7 @@ public class CompoundCommand implements ICompoundCommand {
      */
     public static class Builder {
         private final List<DriverCommand> commands = new ArrayList<>();
+        private String name = "Compound Command";
 
         /**
          * Adds multiple commands to the builder.
@@ -108,6 +125,7 @@ public class CompoundCommand implements ICompoundCommand {
             this.commands.addAll(commands);
             return this;
         }
+        
 
         /**
          * Adds all commands from another compound command to the builder.
@@ -145,12 +163,23 @@ public class CompoundCommand implements ICompoundCommand {
         }
 
         /**
+         * Sets the name of the compound command being built.
+         * 
+         * @param name the name to set
+         * @return this builder instance for method chaining
+         */
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        /**
          * Builds the CompoundCommand instance with all added commands.
          * 
          * @return a new CompoundCommand instance containing all added commands
          */
         public CompoundCommand build() {
-            return new CompoundCommand(commands);
+            return new CompoundCommand(commands, name);
         }
     }
 
@@ -162,4 +191,24 @@ public class CompoundCommand implements ICompoundCommand {
     public static Builder builder() {
         return new Builder();
     }
+
+    /**
+     * Returns the string representation of this compound command.
+     * 
+     * @return the name of the compound command
+     */
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    /**
+     * Gets the name of this compound command.
+     * 
+     * @return the name of the compound command
+     */
+    public String getName() {
+        return name;
+    }
+
 }
