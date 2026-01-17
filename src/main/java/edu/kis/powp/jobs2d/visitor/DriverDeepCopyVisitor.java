@@ -9,6 +9,7 @@ import edu.kis.powp.jobs2d.drivers.DriverComposite;
 import edu.kis.powp.jobs2d.drivers.LoggerDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.transformation.TransformerDriverDecorator;
+import edu.kis.powp.jobs2d.drivers.UsageTrackingDriverDecorator;
 import edu.kis.legacy.drawer.shape.ILine;
 
 public class DriverDeepCopyVisitor implements DriverVisitor {
@@ -62,5 +63,12 @@ public class DriverDeepCopyVisitor implements DriverVisitor {
         } else {
             copy = new TransformerDriverDecorator(driver, transformerDriverDecorator.getStrategy());
         }
+    }
+
+    @Override
+    public void visit(UsageTrackingDriverDecorator usageTrackingDriverDecorator) {
+        usageTrackingDriverDecorator.getDelegate().accept(this);
+        VisitableJob2dDriver targetCopy = copy;
+        copy = new UsageTrackingDriverDecorator(targetCopy, usageTrackingDriverDecorator.getLabel());
     }
 }
