@@ -32,9 +32,7 @@ public class SelectLoadRecordedCommandOptionListener implements ActionListener {
             commandList.add(iterator.next());
         }
         
-        // Reset recording driver
-        this.recordingDriver.resetBuilder();
-        this.recordingDriver.clearRecording();
+        this.recordingDriver.resetRecording();
         
         // Set current commands in manager
         CommandManager manager = CommandsFeature.getDriverCommandManager();

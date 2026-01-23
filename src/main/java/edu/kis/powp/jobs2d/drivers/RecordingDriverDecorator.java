@@ -36,11 +36,8 @@ public class RecordingDriverDecorator implements VisitableJob2dDriver {
         return this.recordedCommands;
     }
 
-    public void resetBuilder() {
+    public void resetRecording() {
         commandBuilder.clear();
-    }
-
-    public void clearRecording() {
         this.recordedCommands = null;
     }
     
@@ -55,8 +52,5 @@ public class RecordingDriverDecorator implements VisitableJob2dDriver {
     @Override
     public void accept(DriverVisitor visitor) {
         visitor.visit(this);
-        if (targetDriver instanceof VisitableJob2dDriver) {
-            ((VisitableJob2dDriver) targetDriver).accept(visitor);
-        }
     }
 }
