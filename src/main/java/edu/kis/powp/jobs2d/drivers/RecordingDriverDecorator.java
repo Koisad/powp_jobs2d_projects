@@ -6,11 +6,11 @@ import edu.kis.powp.jobs2d.visitor.DriverVisitor;
 import edu.kis.powp.jobs2d.visitor.VisitableJob2dDriver;
 
 public class RecordingDriverDecorator implements VisitableJob2dDriver {
-    private final Job2dDriver targetDriver;
+    private final VisitableJob2dDriver targetDriver;
     private final CompoundCommand.Builder commandBuilder = new CompoundCommand.Builder();
     private CompoundCommand recordedCommands = null;
 
-    public RecordingDriverDecorator(Job2dDriver targetDriver) {
+    public RecordingDriverDecorator(VisitableJob2dDriver targetDriver) {
         this.targetDriver = targetDriver;
     }
 
@@ -42,6 +42,10 @@ public class RecordingDriverDecorator implements VisitableJob2dDriver {
     }
     
     // Methods used in listener END
+
+    public VisitableJob2dDriver getDelegate() {
+        return this.targetDriver;
+    }
 
     @Override
     public String toString() {
